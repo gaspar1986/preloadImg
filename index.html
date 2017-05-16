@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<style type="text/css">
+		html,body{
+			height: 100%;
+		}
+		.box{
+			text-align: center;
+		}
+		.loading{
+			position: fixed;
+			left:0;
+			top:0;
+			width: 100%;
+			height: 100%;
+			background: #eee;
+			text-align: center;
+			font-size: 30px;
+		}
+		.progress{
+			margin-top: 300px;
+		}
+	</style>
+</head>
+<body>
+	<div class="box">
+		<img src="http://i2.hoopchina.com.cn/user/308/15960308/13383588090.jpg" width="1200">
+		<div>
+			<button data-control="prev">上一张</button>
+			<button data-control="next">下一张</button>
+		</div>
+	</div>
+	<div class="loading">
+		<p class="progress">0%</p>
+	</div>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/preload.js"></script>
+	<script>
+		$(function(){
+			var imgs = [
+			'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1494933175602&di=98cd3ce8fe977437ff234af5b810240c&imgtype=0&src=http%3A%2F%2Fpic6.huitu.com%2Fres%2F20130116%2F84481_20130116142820494200_1.jpg',
+			'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1494933222809&di=36db47fe90541a3dbad52062a1165f39&imgtype=0&src=http%3A%2F%2Fsucai.qqjay.com%2Fqqjayxiaowo%2F201210%2F26%2F1.jpg',
+			'https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1494933249673&di=337e49141f0304ca3a8f5e17ffa4ca00&imgtype=0&src=http%3A%2F%2Fpic44.nipic.com%2F20140717%2F12432466_121957328000_2.jpg'
+			]
+			var index=0,
+			$progress = $('.progress'),
+			len=imgs.length;
+			$.preload(imgs,{
+				each:function(count){
+					$progress.html(Math.round((count+1)/len * 100)+'%');
+				},
+				all:function(){
+					$('.loading').hide();
+					document.title = '1/'+ len;
+				}
+			});
+			
+			$('button').on('click',function() {
+				if($(this).data('control') === 'prev'){
+					index = Math.max(0,--index);
+				}else{
+					index = Math.min(len-1,++index);
+				}
+				document.title = (index + 1)+ '/' + len;
+				$('img').attr('src',imgs[index]);
+			})
+
+		})
+	</script>
+</body>
+</html>
